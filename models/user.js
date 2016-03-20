@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Property = require('./property');
 
 var userSchema = new Schema({
     firstName: String,
@@ -10,6 +11,7 @@ var userSchema = new Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     admin : Boolean,
+    properties: [Property.schema],
     created_at: Date,
     updated_at: Date
 });
