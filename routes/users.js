@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -28,21 +31,23 @@ router.get('/:user_id', function(req, res){
 });
 
 router.post('/', function(req, res) {
+  console.log('first');
   data = req.body;
-  var user = new User({
-    firstName: data.firstName,
+  User.register(new User({
+    email: data.email
+    /*firstName: data.firstName,
     lastName: data.lastName,
-    email: data.email,
-    password: data.password
-  });
-   user.save(function(err) {
+    email: data.email*/
+  }), data.password, function(err, user) {
+    console.log('register');
     if(err){
       res.status(400);
-      res.send();
+      res.send(err);
     } else {
       res.send(user);
     }
   });
+  console.log('lel');
 });
 
 router.delete('/:user_id', function(req, res) {

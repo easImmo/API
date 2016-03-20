@@ -5,12 +5,29 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
+
+
+
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var properties = require('./routes/properties');
 
 var app = express();
+
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +42,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', routes);
 app.use('/users', users);
@@ -60,6 +78,14 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+
+// passport config
+var User = require('./models/user');
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 module.exports = app;
