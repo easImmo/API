@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Room = require('./room');
 
 var propertySchema = new Schema({
     name: {type: String, required: true},
@@ -11,6 +12,7 @@ var propertySchema = new Schema({
     zipCode: {type: Number, required: true},
     city: {type: String, required: true},
     user: {type:Schema.Types.ObjectId, ref:'User'},
+    rooms: [Room.schema],
     created_at: Date,
     updated_at: Date
 });

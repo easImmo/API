@@ -3,13 +3,15 @@
  */
 var express = require('express');
 var router = express.Router();
+var async = require('async');
 var Property = require('../models/property');
+var RoomType = require('../models/roomType');
 var User = require('../models/user');
 
 /* GET properties listing. */
 router.get('/', function(req, res) {
     // get all the properties
-    User.distinct('properties', function(err, properties) {
+    Property.find({}, function(err, properties) {
         if (err) {
             res.status(500);
             res.send();
@@ -21,21 +23,29 @@ router.get('/', function(req, res) {
 
 router.get('/:property_id', function(req, res){
     var property_id = req.params.property_id;
-    User.distinct('properties', function(err, properties) {
-        if (err) {
-            res.status(500);
+    Property.findById(property_id).populate('user').exec(function(err, property) {
+        if(!property) {
+            res.status(404);
             res.send();
         } else {
-            var property = properties.filter(function (prop) {
-                return (prop._id == property_id);
-            })[0];
-            if(property.isUndefined()) {
-                res.status(404);
-                res.send();
-            } else {
-                res.send(properties);
-            }
+            async.forEachOf(property.rooms,function(room,index,callback){
+                RoomType.populate(room,{path: 'roomType'},function(err,room) {
+                    if(err){
+                        console.log('error populating room :'+room);
+                    } else {
+                        property.rooms[index] = room;
+                        console.log('OLEL 00000000 ~~~~~~'+property);
+                    }
+                    callback();
+                });
+                console.log('OLEL TEST :'+index);
+            },function(err){
+                if(err){console.log(err);}
+                console.log('OLEL ~~~~~~'+property);
+                res.send(property);
+            });
         }
+
     });
 });
 
@@ -53,7 +63,7 @@ router.post('/:user_id', function(req, res) {
                 addressLine2: data.addressLine2,
                 zipCode: data.zipCode,
                 city: data.city,
-                user:user,
+                user:user
             });
 
             property.save(function(err) {
