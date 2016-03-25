@@ -37,7 +37,7 @@ router.post('/', function(req, res) {
     email: data.email
     /*firstName: data.firstName,
     lastName: data.lastName,
-    email: data.email*/
+    */
   }), data.password, function(err, user) {
     console.log('register');
     if(err){

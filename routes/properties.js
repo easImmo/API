@@ -9,7 +9,7 @@ var User = require('../models/user');
 /* GET properties listing. */
 router.get('/', function(req, res) {
     // get all the properties
-    Property.find({}, function(err, properties) {
+    User.distinct('properties', function(err, properties) {
         if (err) {
             res.status(500);
             res.send();
@@ -21,12 +21,20 @@ router.get('/', function(req, res) {
 
 router.get('/:property_id', function(req, res){
     var property_id = req.params.property_id;
-    Property.findById(property_id, function(err,property) {
-        if (!property) {
-            res.status(404);
+    User.distinct('properties', function(err, properties) {
+        if (err) {
+            res.status(500);
             res.send();
         } else {
-            res.send(property);
+            var property = properties.filter(function (prop) {
+                return (prop._id == property_id);
+            })[0];
+            if(property.isUndefined()) {
+                res.status(404);
+                res.send();
+            } else {
+                res.send(properties);
+            }
         }
     });
 });
@@ -44,13 +52,11 @@ router.post('/:user_id', function(req, res) {
                 addressLine1: data.addressLine1,
                 addressLine2: data.addressLine2,
                 zipCode: data.zipCode,
-                city: data.city
+                city: data.city,
+                user:user,
             });
-            console.log(user);
-            console.log(property);
-            console.log(user.properties);
-            user.properties.push(property);
-            user.save(function(err) {
+
+            property.save(function(err) {
                 if(err){
                     res.status(400);
                     res.send();

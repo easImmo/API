@@ -10,8 +10,7 @@ var userSchema = new Schema({
     firstName: String,
     lastName: String,
     email: {type: String, required: true, unique: true},
-    admin : Boolean,
-    properties: [Property.schema]
+    admin : Boolean
 },
     {
         timestamps: true
