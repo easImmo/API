@@ -17,6 +17,8 @@ var properties = require('./routes/properties');
 var rooms = require('./routes/rooms');
 var roomTypes = require('./routes/roomTypes');
 var reports = require('./routes/reports');
+var equipmentTypes = require('./routes/equipmentTypes');
+var equipmentStates = require('./routes/equipmentStates');
 var routes = require('./routes/index');
 
 var app = express();
@@ -52,6 +54,8 @@ app.use('/users', users);
 app.use('/properties',properties);
 app.use('/rooms',rooms);
 app.use('/roomTypes',roomTypes);
+app.use('/equipmentTypes',equipmentTypes);
+app.use('/equipmentStates',equipmentStates);
 app.use('/reports',reports);
 
 // catch 404 and forward to error handler

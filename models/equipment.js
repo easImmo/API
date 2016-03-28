@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var equipmentSchema = new Schema({
+
 });
 
 var Equipment = mongoose.model('Equipment',equipmentSchema);
