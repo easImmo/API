@@ -32,9 +32,9 @@ router.get('/:room_id', function(req, res){
     });
 });
 
-router.post('/:property_id', function(req, res) {
-    var property_id = req.params.property_id;
+router.post('/', function(req, res) {
     data = req.body;
+    var property_id = data.property_id;
     Property.findById(property_id, function(err,property) {
         if(!property) {
             console.log('property not found : '+property_id);

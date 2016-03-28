@@ -34,14 +34,11 @@ router.get('/:property_id', function(req, res){
                         console.log('error populating room :'+room);
                     } else {
                         property.rooms[index] = room;
-                        console.log('OLEL 00000000 ~~~~~~'+property);
                     }
                     callback();
                 });
-                console.log('OLEL TEST :'+index);
             },function(err){
                 if(err){console.log(err);}
-                console.log('OLEL ~~~~~~'+property);
                 res.send(property);
             });
         }
@@ -49,9 +46,9 @@ router.get('/:property_id', function(req, res){
     });
 });
 
-router.post('/:user_id', function(req, res) {
-    var user_id = req.params.user_id;
+router.post('/', function(req, res) {
     data = req.body;
+    var user_id = data.user_id;
     User.findById(user_id, function(err,user) {
         if(!user) {
             res.status(404);
