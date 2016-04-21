@@ -3,9 +3,11 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Assessment = require('./assessment');
 
 var reportSchema = new Schema({
     property: {type:Schema.Types.ObjectId, ref:'Property'},
+    assessments : [Assessment],
     created_at: Date,
     updated_at: Date
 });

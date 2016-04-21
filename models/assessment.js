@@ -8,6 +8,7 @@ var Schema = mongoose.Schema;
 var assessmentSchema = new Schema({
     equipment: {type:Schema.Types.ObjectId, ref:'Equipment'},
     equipmentState: {type:Schema.Types.ObjectId, ref:'EquipmentState'},
+    comment: {type: String},
     created_at: Date,
     updated_at: Date
 });
