@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var passport = require('passport');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -15,7 +16,16 @@ router.get('/', function(req, res) {
   });
 });
 
-router.get('/:user_id', function(req, res){
+router.post('/login',
+    passport.authenticate('local',{ session: false }),
+    function(req, res) {
+      // If this function gets called, authentication was successful.
+      // `req.user` contains the authenticated user.
+      res.status(200);
+      res.json({ id: req.user.id, username: req.user.email });
+    });
+
+router.get('/:user_id', function(req, res) {
   var user_id = req.params.user_id;
   User.findById(user_id, function(err,user) {
     if (!user) {
@@ -44,7 +54,6 @@ router.post('/', function(req, res) {
       res.send(user);
     }
   });
-  console.log('lel');
 });
 
 router.delete('/:user_id', function(req, res) {
