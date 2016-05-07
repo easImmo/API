@@ -3,10 +3,12 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Equipment = require('./equipment');
 
 var roomSchema = new Schema({
     surface: {type: Number, required : true},
-    roomType : {type: Schema.Types.ObjectId, ref: 'roomType'}
+    roomType : {type: String, required : true},
+    equipment : [Equipment.schema]
 });
 
 var Room = mongoose.model('Room',roomSchema);

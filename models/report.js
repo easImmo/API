@@ -6,7 +6,6 @@ var Schema = mongoose.Schema;
 var Assessment = require('./assessment');
 
 var reportSchema = new Schema({
-    property: {type:Schema.Types.ObjectId, ref:'Property'},
     assessments : [Assessment.schema],
     created_at: Date,
     updated_at: Date

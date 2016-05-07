@@ -20,6 +20,7 @@ var reports = require('./routes/reports');
 var equipmentTypes = require('./routes/equipmentTypes');
 var equipmentStates = require('./routes/equipmentStates');
 var routes = require('./routes/index');
+var assessments = require('./routes/assessments');
 
 var app = express();
 
@@ -57,6 +58,7 @@ app.use('/roomTypes',roomTypes);
 app.use('/equipmentTypes',equipmentTypes);
 app.use('/equipmentStates',equipmentStates);
 app.use('/reports',reports);
+app.use('/assessments',assessments);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

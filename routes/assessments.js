@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 var Report = require('../models/report');
 var Assessment = require('../models/assessment');
-var AssessmentType = require('../models/assessmentType');
+var EquipmentState = require('../models/equipmentState');
 
 /* GET assessments listing. */
 router.get('/', function(req, res) {
@@ -41,15 +41,15 @@ router.post('/', function(req, res) {
             res.status(404);
             res.send();
         } else {
-            AssessmentType.findById(data.assessmentType, function(err,assessmentType) {
-                if(!assessmentType) {
-                    console.log('assessment not found : '+data.assessmentType);
+             EquipmentState.findById(data.equipmentState, function(err,equipmentState) {
+                if(!equipmentState) {
+                    console.log('EquipmentState not found : '+data.equipmentState);
                     res.status(404);
                     res.send();
                 } else {
                     var assessment = new Assessment({
-                        surface : data.surface,
-                        assessmentType : assessmentType
+                        
+                        equipmentState : equipmentState
                     });
                     report.assessments.push(assessment);
                     report.save(function(err) {
