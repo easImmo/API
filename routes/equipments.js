@@ -1,11 +1,11 @@
 /**
- * Created by Nicolas on 3/25/2016.
+ * Created by Nicolas on 5/8/2016.
  */
 var express = require('express');
 var router = express.Router();
-var Room = require('../models/room');
 var Property = require('../models/property');
-var RoomType = require('../models/roomType');
+var Room = require('../models/room');
+var Equipment = require('../models/equipment');
 var _ = require('underscore');
 
 
@@ -25,38 +25,42 @@ router.get('/:room_id', function(req, res){
 
 router.post('/', function(req, res) {
     data = req.body;
-    var property_id = data.property_id;
-    Property.findById(property_id, function(err,property) {
+    var room_id = data.room_id;
+    Property.findOne({'rooms._id' : room_id }, function(err,property) {
         if(!property) {
-            console.log('property not found : '+property_id);
+            console.log('property not found');
             res.status(404);
             res.send();
         } else {
-            var room = new Room({
-                surface : data.surface,
-                roomType : data.roomType
+            var room =  _.find(property.rooms, function(room) { return room.id == room_id });
+
+            console.log(data.equipmentType);
+            var equipment = new Equipment({
+                equipmentType: data.equipmentType
             });
-            property.rooms.push(room);
+
+            property.rooms.id(room._id).equipments.push(equipment);
             property.save(function(err) {
                 if(err){
                     res.status(400);
                     res.send();
                 } else {
-                    res.send(room);
+                    res.send(equipment);
                 }
             });
         }
     });
 });
 
-router.delete('/:room_id', function(req, res) {
-    var room_id = req.params.room_id;
-    Property.findOne({'rooms._id' : room_id }, function(err,property) {
+router.delete('/:equipment_id', function(req, res) {
+    var equipment_id = req.params.equipment_id;
+    Property.findOne({'rooms.equipments._id' : equipment_id }, function(err,property) {
         if (!property) {
             res.status(404);
             res.send();
         } else {
-            property.rooms.id(room_id).remove();
+            var room =  _.find(property.rooms, function(room) { return _.find(room.equipments, function(equipment) { return equipment.id == equipment_id })});
+            property.rooms.id(room._id).equipments.pull({ _id: equipment_id });
             property.save(function (err) {
                 if (err) res.sendStatus(500);
                 else res.sendStatus(200);

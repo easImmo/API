@@ -6,9 +6,9 @@ var Schema = mongoose.Schema;
 var Equipment = require('./equipment');
 
 var roomSchema = new Schema({
-    surface: {type: Number, required : true},
+    surface : {type: Number, required : true},
     roomType : {type: String, required : true},
-    equipment : [Equipment.schema]
+    equipments : [Equipment.schema]
 });
 
 var Room = mongoose.model('Room',roomSchema);

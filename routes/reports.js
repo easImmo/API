@@ -5,6 +5,10 @@ var express = require('express');
 var router = express.Router();
 var Report = require('../models/report');
 var Property = require('../models/property');
+var Equipment = require('../models/equipment');
+var _ = require('underscore');
+var async = require('async');
+
 
 /* GET reports listing. */
 router.get('/', function(req, res) {
@@ -21,12 +25,26 @@ router.get('/', function(req, res) {
 
 router.get('/:report_id', function(req, res){
     var report_id = req.params.report_id;
-    Report.findById(report_id).exec(function(err, report) {
-        if(!report) {
+    Property.findOne({'reports._id' : report_id }).lean().exec(function(err,property) {
+        if(!property) {
             res.status(404);
             res.send();
         } else {
-            res.send(report);
+            var reportIndex = _.findIndex(property.reports, function(report) { return report._id == report_id });
+
+            async.forEachOf(property.reports[reportIndex].assessments,function(assessment,index,callback){
+                var equipmentId = assessment.equipment.toString();
+
+                var room = _.find(property.rooms, function(room) { return  _.find(room.equipments, function(equipment) { return equipment._id == equipmentId }) });
+
+                property.reports[reportIndex].assessments[index].equipment = _.find(room.equipments, function(equipment) { return equipment._id == equipmentId});
+                callback();
+            },function(err){
+                if(err){console.log(err);}
+                res.send(property.reports[reportIndex]);
+            });
+
+
         }
 
     });
@@ -40,11 +58,11 @@ router.post('/', function(req, res) {
             res.status(404);
             res.send();
         } else {
-            var report = new Report({
-                property:property
-            });
+            var report = new Report();
 
-            report.save(function(err) {
+            property.reports.push(report);
+
+            property.save(function(err) {
                 if(err){
                     res.status(400);
                     res.send();
@@ -59,21 +77,19 @@ router.post('/', function(req, res) {
 
 router.delete('/:report_id', function(req, res) {
     var report_id = req.params.report_id;
-    Report.findById(report_id, function(err, report) {
-        if(!report){
+    Property.findOne({'reports._id' : report_id }, function(err,property) {
+        if (!property) {
             res.status(404);
+            res.send();
         } else {
-            report.remove(function(err) {
-                if(err){
-                    res.status(500);
-                } else {
-                    res.status(201);
-                }
+            property.reports.id(report_id).remove();
+            property.save(function (err) {
+                if (err) res.sendStatus(500);
+                else res.sendStatus(200);
             });
         }
-        res.send();
     });
-
 });
+
 
 module.exports = router;

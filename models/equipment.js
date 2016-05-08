@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var equipmentSchema = new Schema({
-    equipmentType : {type: Schema.Types.ObjectId, ref: 'equipmentType'}
+    equipmentType : {type: String, required : true}
 });
 
 var Equipment = mongoose.model('Equipment',equipmentSchema);

@@ -3,65 +3,42 @@
  */
 var express = require('express');
 var router = express.Router();
-var Report = require('../models/report');
+var Property = require('../models/property');
 var Assessment = require('../models/assessment');
-var EquipmentState = require('../models/equipmentState');
+var Equipment = require('../models/equipment');
+var _ = require('underscore');
 
-/* GET assessments listing. */
-router.get('/', function(req, res) {
-    // get all the assessments
-    Assessment.find({}, function(err, assessments) {
-        if (err) {
-            res.status(500);
-            res.send();
-        } else {
-            res.send(assessments);
-        }
-    });
-});
-
-router.get('/:assessment_id', function(req, res){
-    var assessment_id = req.params.assessment_id;
-    Assessment.findById(assessment_id, function(err,assessment) {
-        if (!assessment) {
-            res.status(404);
-            res.send();
-        } else {
-            res.send(assessment);
-        }
-    });
-});
 
 router.post('/', function(req, res) {
     data = req.body;
     var report_id = data.report_id;
-    Report.findById(report_id, function(err,report) {
-        if(!report) {
+    Property.findOne({'reports._id' : report_id }, function(err,property) {
+        if(!property) {
             console.log('report not found : '+report_id);
             res.status(404);
             res.send();
         } else {
-             EquipmentState.findById(data.equipmentState, function(err,equipmentState) {
-                if(!equipmentState) {
-                    console.log('EquipmentState not found : '+data.equipmentState);
-                    res.status(404);
-                    res.send();
-                } else {
-                    var assessment = new Assessment({
-                        
-                        equipmentState : equipmentState
-                    });
-                    report.assessments.push(assessment);
-                    report.save(function(err) {
-                        if(err){
-                            res.status(400);
-                            res.send();
-                        } else {
-                            res.send(report);
-                        }
-                    });
-                }
-            });
+            var room = _.find(property.rooms, function(room) { return  _.find(room.equipments, function(equipment) { return equipment.id == data.equipment_id }) });
+            var equipment =  _.find(room.equipments, function(equipment) { return equipment.id == data.equipment_id });
+            if(!equipment){
+                res.sendStatus(404);
+            } else {
+                var assessment = new Assessment({
+                    equipment : equipment,
+                    equipmentState : data.equipmentState
+                });
+                var report =  _.find(property.reports, function(report) { return report.id == report_id });
+
+                property.reports.id(report._id).assessments.push(assessment);
+                property.save(function(err) {
+                    if(err){
+                        res.status(400);
+                        res.send();
+                    } else {
+                        res.send(assessment);
+                    }
+                })
+            }
         }
     });
 });

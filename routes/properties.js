@@ -28,19 +28,20 @@ router.get('/:property_id', function(req, res){
             res.status(404);
             res.send();
         } else {
-            async.forEachOf(property.rooms,function(room,index,callback){
-                RoomType.populate(room,{path: 'roomType'},function(err,room) {
-                    if(err){
-                        console.log('error populating room :'+room);
-                    } else {
-                        property.rooms[index] = room;
-                    }
-                    callback();
-                });
-            },function(err){
-                if(err){console.log(err);}
-                res.send(property);
-            });
+            res.send(property);
+        }
+
+    });
+});
+
+router.get('/user/:user_id', function(req, res){
+    var user_id = req.params.user_id;
+    Property.find({'user':user_id}, function(err, properties) {
+        if(!properties) {
+            res.status(404);
+            res.send();
+        } else {
+            res.send(properties);
         }
 
     });

@@ -4,17 +4,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Room = require('./room');
-var Assessment = require('./assessment');
+var Report = require('./report');
 
 var propertySchema = new Schema({
     name: {type: String, required: true},
     addressLine1: {type: String, required: true},
-    addressLine2: {type: String, required: true},
+    addressLine2: {type: String},
     zipCode: {type: Number, required: true},
     city: {type: String, required: true},
     user: {type:Schema.Types.ObjectId, ref:'User'},
     rooms: [Room.schema],
-    assessments: [Assessment.schema],
+    reports: [Report.schema],
     created_at: Date,
     updated_at: Date
 });
