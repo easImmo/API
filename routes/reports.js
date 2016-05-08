@@ -6,6 +6,7 @@ var router = express.Router();
 var Report = require('../models/report');
 var Property = require('../models/property');
 var Equipment = require('../models/equipment');
+var Assessment = require('../models/assessment');
 var _ = require('underscore');
 var async = require('async');
 
@@ -59,7 +60,6 @@ router.post('/', function(req, res) {
             res.send();
         } else {
             var report = new Report();
-
             property.reports.push(report);
 
             property.save(function(err) {
@@ -73,6 +73,24 @@ router.post('/', function(req, res) {
         }
     });
 
+});
+
+router.put('/', function (req,res) {
+    data = req.body;
+    var report_id = data.report_id;
+    Property.findOne({'reports._id' : report_id }).lean().exec(function(err,property) {
+        if(!property) {
+            res.status(404);
+            res.send();
+        } else {
+            var reportIndex = _.findIndex(property.reports, function(report) { return report._id == report_id });
+
+            property.reports[reportIndex].comment = data.comment;
+
+            res.send(property.reports[reportIndex]);
+        }
+
+    });
 });
 
 router.delete('/:report_id', function(req, res) {

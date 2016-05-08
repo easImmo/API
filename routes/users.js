@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var passport = require('passport');
+var nodemailer = require('nodemailer');
+var config = require('../env.json');
+
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -16,13 +19,40 @@ router.get('/', function(req, res) {
   });
 });
 
+router.get('/mail', function (req,res) {
+  var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: config.email,
+      pass: config.pass
+    }
+  });
+
+  var mailOptions = {
+    from: '', // sender address
+    to: 'nducom@gmail.com', // list of receivers
+    subject: 'logement', // Subject line
+    html: '<b>Hello world ✔</b><br/><img src="http://placekitten.com/200/300">' // You can choose to send an HTML body instead
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+      console.log(error);
+      res.json({yo: 'error'});
+    }else{
+      console.log('Message sent: ' + info.response);
+      res.json({yo: info.response});
+    }
+  });
+});
+
 router.post('/login',
     passport.authenticate('local',{ session: false }),
     function(req, res) {
       // If this function gets called, authentication was successful.
       // `req.user` contains the authenticated user.
       res.status(200);
-      res.json({ id: req.user.id, username: req.user.email });
+      res.json({ _id: req.user.id, username: req.user.email });
     });
 
 router.get('/:user_id', function(req, res) {

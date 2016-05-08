@@ -14,10 +14,11 @@ var propertySchema = new Schema({
     city: {type: String, required: true},
     user: {type:Schema.Types.ObjectId, ref:'User'},
     rooms: [Room.schema],
-    reports: [Report.schema],
-    created_at: Date,
-    updated_at: Date
-});
+    reports: [Report.schema]
+},
+    {
+        timestamps: true
+    });
 
 var Property = mongoose.model('Property',propertySchema);
 

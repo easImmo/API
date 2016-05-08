@@ -7,9 +7,11 @@ var Assessment = require('./assessment');
 
 var reportSchema = new Schema({
     assessments : [Assessment.schema],
-    created_at: Date,
-    updated_at: Date
-});
+    comment : String
+},
+    {
+        timestamps: true
+    });
 
 var Report = mongoose.model('Report',reportSchema);
 
