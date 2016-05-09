@@ -69,6 +69,8 @@ router.post('/', function(req, res) {
                     res.status(400);
                     res.send();
                 } else {
+                    property.user = property.user._id;
+                    console.log(property.user);
                     res.send(property);
                 }
             });
