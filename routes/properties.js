@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 
 router.get('/:property_id', function(req, res){
     var property_id = req.params.property_id;
-    Property.findById(property_id).populate('user').exec(function(err, property) {
+    Property.findById(property_id, function(err, property) {
         if(!property) {
             res.status(404);
             res.send();
@@ -70,13 +70,38 @@ router.post('/', function(req, res) {
                     res.send();
                 } else {
                     property.user = property.user._id;
-                    console.log(property.user);
                     res.send(property);
                 }
             });
         }
     });
 
+});
+
+router.put('/', function (req,res) {
+    data = req.body;
+    var property_id = data.property_id;
+    Property.findById(property_id,function(err,property) {
+        if(!property) {
+            res.status(404);
+            res.send();
+        } else {
+            property.name = data.name;
+            property.addressLine1 = data.addressLine1;
+            property.addressLine2 = data.addressLine2;
+            property.city = data.city;
+            property.zip = data.zip;
+
+            property.save(function (err) {
+                if (err) {
+                    res.status(500);
+                    res.send();
+                } else {
+                    res.send(property);
+                }
+            })
+        }
+    });
 });
 
 router.delete('/:property_id', function(req, res) {
