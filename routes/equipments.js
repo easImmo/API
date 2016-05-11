@@ -16,7 +16,7 @@ router.get('/:equipment_id', function(req, res){
             res.status(404);
             res.send();
         } else {
-            var room =  _.find(property.rooms, function(room) { _.find(room.equipments, function(equipment) { return equipment.id == equipment_id })});
+            var room =  _.find(property.rooms, function(room) { return _.find(room.equipments, function(equipment) { return equipment.id == equipment_id })});
             console.log(room);
             var equipment = _.find(room.equipments, function(equipment) { return equipment.id == equipment_id});
             console.log(equipment);
