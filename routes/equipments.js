@@ -9,16 +9,19 @@ var Equipment = require('../models/equipment');
 var _ = require('underscore');
 
 
-router.get('/:room_id', function(req, res){
-    var room_id = req.params.room_id;
-    Property.findOne({'rooms._id' : room_id }, function(err,property) {
+router.get('/:equipment_id', function(req, res){
+    var equipment_id = req.params.equipment_id;
+    Property.findOne({'rooms.equipments._id' : equipment_id }, function(err,property) {
         if (!property) {
             res.status(404);
             res.send();
         } else {
-            var room =  _.find(property.rooms, function(room) { return room.id == room_id });
+            var room =  _.find(property.rooms, function(room) { return _.find(room.equipments, function(equipment) { return equipment.id == equipment_id })});
+            console.log(room);
+            var equipment = _.find(room.equipments, function(equipment) { return equipment.id == equipment_id});
+            console.log(equipment);
             res.status(200);
-            res.send(room);
+            res.send(equipment);
         }
     });
 });

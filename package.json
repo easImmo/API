@@ -14,7 +14,6 @@
     "jade": "~1.11.0",
     "mongoose": "^4.4.7",
     "morgan": "~1.6.1",
-    "nodemailer": "~2.3.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",

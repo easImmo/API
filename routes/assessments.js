@@ -25,7 +25,8 @@ router.post('/', function(req, res) {
             } else {
                 var assessment = new Assessment({
                     equipment : equipment,
-                    equipmentState : data.equipmentState
+                    equipmentState : data.equipmentState,
+                    comment : data.comment
                 });
                 var report =  _.find(property.reports, function(report) { return report.id == report_id });
 
