@@ -21,6 +21,7 @@ var equipments = require('./routes/equipments');
 var equipmentTypes = require('./routes/equipmentTypes');
 var equipmentStates = require('./routes/equipmentStates');
 var routes = require('./routes/index');
+var images = require('./routes/images');
 var assessments = require('./routes/assessments');
 
 var app = express();
@@ -60,6 +61,7 @@ app.use('/equipments',equipments);
 app.use('/equipmentTypes',equipmentTypes);
 app.use('/equipmentStates',equipmentStates);
 app.use('/reports',reports);
+app.use('/images',images);
 app.use('/assessments',assessments);
 
 
@@ -101,6 +103,5 @@ var User = require('./models/user');
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
 
 module.exports = app;
