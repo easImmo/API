@@ -7,7 +7,8 @@ var Assessment = require('./assessment');
 
 var reportSchema = new Schema({
     assessments : [Assessment.schema],
-    comment : String
+    comment : String,
+    type: {type: String, enum: ['ENTRY', 'EXIT']}
 },
     {
         timestamps: true

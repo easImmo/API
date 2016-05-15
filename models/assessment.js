@@ -4,11 +4,13 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Image = require('./image');
 
 var assessmentSchema = new Schema({
     equipment: {type:Schema.Types.ObjectId, ref:'Equipment'},
     equipmentState: {type:String},
-    comment: {type: String}
+    comment: {type: String},
+    image: [Image.schema]
 },
     {
         timestamps: true

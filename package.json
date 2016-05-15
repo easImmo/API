@@ -19,7 +19,8 @@
     "passport-local-mongoose": "^4.0.0",
     "serve-favicon": "~2.3.0",
     "underscore": "~1.8.3",
-    "multer":"~1.1.0"
+    "multer":"~1.1.0",
+    "fs-extra":"~0.30.0"
   },
   "devDependencies": {
     "async": "^1.5.2"

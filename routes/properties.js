@@ -90,7 +90,7 @@ router.put('/', function (req,res) {
             property.addressLine1 = data.addressLine1;
             property.addressLine2 = data.addressLine2;
             property.city = data.city;
-            property.zip = data.zip;
+            property.zip = data.zipCode;
 
             property.save(function (err) {
                 if (err) {

@@ -4,11 +4,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Equipment = require('./equipment');
+var Image = require('./image');
 
 var roomSchema = new Schema({
     surface : {type: Number, required : true},
     roomType : {type: String, required : true},
-    equipments : [Equipment.schema]
+    equipments : [Equipment.schema],
+    image : Image.schema
 });
 
 var Room = mongoose.model('Room',roomSchema);
