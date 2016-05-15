@@ -59,7 +59,10 @@ router.post('/', function(req, res) {
             res.status(404);
             res.send();
         } else {
-            var report = new Report();
+            var report = new Report({
+                comment : data.comment,
+                type : data.type
+        });
             property.reports.push(report);
 
             property.save(function(err) {
