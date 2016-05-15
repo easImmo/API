@@ -34,4 +34,8 @@ node_modules
 
 .idea
 
+uploads/
+
+tmpDl/
+
 env.json
