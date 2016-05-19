@@ -38,8 +38,7 @@ router.post('/', upload.single('image'), function (req, res, next) {
                         res.send();
                     } else {
                             var report =  _.find(property.reports, function(report) { return _.find(report.assessments, function(assessment) { return assessment.id = assessment_id }) });
-                            var assessment = _.find(report.assessments, function(assessment) { return assessment.id = assessment_id });
-                            property.reports.id(report._id).assessments.id(assessment._id).images.push(image);
+                            property.reports.id(report._id).assessments.id(assessment_id).images.push(image);
                             property.save(function(err) {
                                 if(err){
                                     res.status(400);
