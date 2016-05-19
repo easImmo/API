@@ -10,7 +10,7 @@ var assessmentSchema = new Schema({
     equipment: {type:Schema.Types.ObjectId, ref:'Equipment'},
     equipmentState: {type:String},
     comment: {type: String},
-    image: [Image.schema]
+    images: [Image.schema]
 },
     {
         timestamps: true
