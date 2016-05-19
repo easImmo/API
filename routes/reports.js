@@ -26,25 +26,14 @@ router.get('/', function(req, res) {
 
 router.get('/:report_id', function(req, res){
     var report_id = req.params.report_id;
-    Property.findOne({'reports._id' : report_id }).lean().exec(function(err,property) {
+    Property.findOne({'reports._id' : report_id }).exec(function(err,property) {
         if(!property) {
             res.status(404);
             res.send();
         } else {
             var reportIndex = _.findIndex(property.reports, function(report) { return report._id == report_id });
 
-            async.forEachOf(property.reports[reportIndex].assessments,function(assessment,index,callback){
-                var equipmentId = assessment.equipment.toString();
-
-                var room = _.find(property.rooms, function(room) { return  _.find(room.equipments, function(equipment) { return equipment._id == equipmentId }) });
-
-                property.reports[reportIndex].assessments[index].equipment = _.find(room.equipments, function(equipment) { return equipment._id == equipmentId});
-                callback();
-            },function(err){
-                if(err){console.log(err);}
-                res.send(property.reports[reportIndex]);
-            });
-
+            res.send(property.reports[reportIndex]);
 
         }
 
