@@ -32,15 +32,7 @@ router.get('/:report_id', function(req, res){
             res.send();
         } else {
             var reportIndex = _.findIndex(property.reports, function(report) { return report._id == report_id });
-
-            async.forEachOf(property.reports[reportIndex].assessments,function(assessment,index,callback){
-                property.reports[reportIndex].assessments[index] = assessment._id;
-                callback();
-            },function(err){
-                if(err){console.log(err);}
                 res.send(property.reports[reportIndex]);
-            });
-
         }
 
     });
